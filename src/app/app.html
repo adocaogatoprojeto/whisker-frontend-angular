@@ -1,11 +1,1 @@
-
-<form class="login" [formGroup]="loginForm" (ngSubmit)="login()">
-  <label for="username">Username</label>
-  <input id="username" type="text" placeholder="Username" formControlName="username"/>
-
-  <label for="password">Password</label>
-  <input id="password" type="password" placeholder="Password" formControlName="password" />
-
-  <button type="submit" [disabled]="!loginForm.valid">Log in</button>
-</form>
 <router-outlet></router-outlet>
