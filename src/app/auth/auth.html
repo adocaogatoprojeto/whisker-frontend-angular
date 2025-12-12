@@ -1,1 +1,71 @@
-<p>auth works!</p>
+<main class="main-container">
+    <section class="auth-container">
+        <aside class="auth-wrapper">
+            <mat-tab-group class="auth-mat-tab-group">
+                <mat-tab label="Login">
+                    <form class="login" [formGroup]="loginForm" (ngSubmit)="login()">
+                        <mat-form-field>
+                            <mat-label for="email">Email</mat-label>
+                            <input id="email" type="text" matInput placeholder="Email"
+                                formControlName="email" />
+                            @if (email.hasError('email') && !email.hasError('required')) {
+                            <mat-error>Please enter a valid email address</mat-error>
+                            }
+                            @if (email.hasError('required')) {
+                            <mat-error>Email is <strong>required</strong></mat-error>
+                            }
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label for="password">Password</mat-label>
+                            <input id="password" type="password" matInput placeholder="Password"
+                                formControlName="password" />
+                            @if (password.hasError('required')) {
+                            <mat-error>Password is <strong>required</strong></mat-error>
+                            }
+                        </mat-form-field>
+                        <a href="https://example.com/forgot-password">Forget password?</a>
+                        <button type="submit" matButton="outlined" [disabled]="!loginForm.valid">Log in</button>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Register">
+                    <form class="register" [formGroup]="registerForm" (ngSubmit)="register()">
+                        <mat-form-field>
+                            <mat-label for="name">Name</mat-label>
+                            <input id="name" type="text" matInput placeholder="Name" formControlName="name" />
+                            @if (name.hasError('required')) {
+                            <mat-error>Name is <strong>required</strong></mat-error>
+                            }
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label for="email">Email</mat-label>
+                            <input id="email" type="text" matInput placeholder="Email"
+                                formControlName="email" />
+                            @if (email.hasError('email') && !email.hasError('required')) {
+                            <mat-error>Please enter a valid email address</mat-error>
+                            }
+                            @if (email.hasError('required')) {
+                            <mat-error>Email is <strong>required</strong></mat-error>
+                            }
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label for="password">Password</mat-label>
+                            <input id="password" type="password" matInput placeholder="Password"
+                                formControlName="password" />
+                            @if (password.hasError('required')) {
+                            <mat-error>Password is <strong>required</strong></mat-error>
+                            }
+                        </mat-form-field>
+                        <button type="submit" matButton="outlined" [disabled]="!registerForm.valid">Register</button>
+                    </form>
+                </mat-tab>
+            </mat-tab-group>
+        </aside>
+        <aside class="video-container">
+        </aside>
+    </section>
+    <article class="underlay">
+        <video width="1980" height="1080" style="filter: brightness(0.5);" autoplay muted loop>
+            <source src="assets/videos/cat-background.mp4" type="video/mp4">
+        </video>
+    </article>
+</main>
