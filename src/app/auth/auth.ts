@@ -12,20 +12,20 @@ import { Router } from '@angular/router';
 export class Auth {
   loginForm: FormGroup;
   registerForm: FormGroup;
-  email = new FormControl('', Validators.required);
+  email = new FormControl('', [Validators.email, Validators.required]);
   password = new FormControl('', Validators.required);
-  name = new FormControl('', Validators.required);
+  username = new FormControl('', Validators.required);
   protected readonly title = signal('whisker-frontend-angular');
 
   constructor(private apiService: ApiService, private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
 
     this.registerForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', Validators.required],
+      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
@@ -42,10 +42,10 @@ export class Auth {
   }
 
   register() {
-    const name = this.registerForm.get('name')?.value;
+    const username = this.registerForm.get('username')?.value;
     const email = this.registerForm.get('email')?.value;
     const password = this.registerForm.get('password')?.value;
-    this.apiService.postV1('user/register', { name, email, password }).then(response => {
+    this.apiService.postV1('user/register', { username, email, password }).then(response => {
       console.log('Register Response:', response);
     }).catch(error => {
       console.error('Register Error:', error);

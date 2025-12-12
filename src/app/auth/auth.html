@@ -6,12 +6,11 @@
                     <form class="login" [formGroup]="loginForm" (ngSubmit)="login()">
                         <mat-form-field>
                             <mat-label for="email">Email</mat-label>
-                            <input id="email" type="text" matInput placeholder="Email"
-                                formControlName="email" />
-                            @if (email.hasError('email') && !email.hasError('required')) {
+                            <input id="email" type="text" matInput placeholder="Email" formControlName="email" />
+                            @if(email.hasError('email')) {
                             <mat-error>Please enter a valid email address</mat-error>
                             }
-                            @if (email.hasError('required')) {
+                            @if (email.hasError('required') ) {
                             <mat-error>Email is <strong>required</strong></mat-error>
                             }
                         </mat-form-field>
@@ -30,16 +29,15 @@
                 <mat-tab label="Register">
                     <form class="register" [formGroup]="registerForm" (ngSubmit)="register()">
                         <mat-form-field>
-                            <mat-label for="name">Name</mat-label>
-                            <input id="name" type="text" matInput placeholder="Name" formControlName="name" />
-                            @if (name.hasError('required')) {
+                            <mat-label for="username">Name</mat-label>
+                            <input id="username" type="text" matInput placeholder="Name" formControlName="username" />
+                            @if (username.hasError('required')) {
                             <mat-error>Name is <strong>required</strong></mat-error>
                             }
                         </mat-form-field>
                         <mat-form-field>
                             <mat-label for="email">Email</mat-label>
-                            <input id="email" type="text" matInput placeholder="Email"
-                                formControlName="email" />
+                            <input id="email" type="text" matInput placeholder="Email" formControlName="email" />
                             @if (email.hasError('email') && !email.hasError('required')) {
                             <mat-error>Please enter a valid email address</mat-error>
                             }
