@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { firstValueFrom, map } from "rxjs";
+import { firstValueFrom, map, Observable } from "rxjs";
 import environment from "../shared/enviroments/enviroment.local";
 
 @Injectable({
@@ -11,7 +11,7 @@ export class ApiService {
     private token: string | null = null;
 
     private getToken(): string | null {
-        this.token = localStorage.getItem('token');
+        this.token = localStorage.getItem('x_access_token');
         return this.token;
     }
 
@@ -30,7 +30,7 @@ export class ApiService {
             ...extraHeaders
         };
         if (token) {
-            headers['x_access_token'] = `Bearer ${token}`;
+            headers['x_access_token'] = `${token}`;
         }
         return firstValueFrom(this.http.get<T>(url, { headers }).pipe(map((res: T) => res)));
     }
@@ -42,7 +42,7 @@ export class ApiService {
             ...extraHeaders
         };
         if (token) {
-            headers['x_access_token'] = `Bearer ${token}`;
+            headers['x_access_token'] = `${token}`;
         }
         return firstValueFrom(this.http.post<T>(url, body, { headers }).pipe(map((res: T) => res)));
     }
@@ -54,7 +54,7 @@ export class ApiService {
             ...extraHeaders
         };
         if (token) {
-            headers['x_access_token'] = `Bearer ${token}`;
+            headers['x_access_token'] = `${token}`;
         }
         return firstValueFrom(this.http.patch<T>(url, body, { headers }).pipe(map((res: T) => res)));
     }
@@ -66,7 +66,7 @@ export class ApiService {
             ...extraHeaders
         };
         if (token) {
-            headers['x_access_token'] = `Bearer ${token}`;
+            headers['x_access_token'] = `${token}`;
         }
         return firstValueFrom(this.http.put<T>(url, body, { headers }).pipe(map((res: T) => res)));
     }
@@ -78,8 +78,13 @@ export class ApiService {
             ...extraHeaders
         };
         if (token) {
-            headers['x_access_token'] = `Bearer ${token}`;
+            headers['x_access_token'] = `${token}`;
         }
         return firstValueFrom(this.http.delete<T>(url, { headers }).pipe(map((res: T) => res)));
+    }
+
+    async verifyToken(x_access_token: string | null): Promise<boolean> {
+        const res = this.postV1<boolean>('auth/check-token', { x_access_token: x_access_token }).then(() => true).catch(() => false);
+        return res
     }
 }
