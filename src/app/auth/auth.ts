@@ -1,13 +1,15 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../api/api.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogErrorDialog } from '../../shared/dialog-error/dialog-error';
 
 @Component({
   selector: 'app-auth',
   standalone: false,
   templateUrl: './auth.html',
-  styleUrl: './auth.scss',
+  styleUrls: ['./auth.scss'],
 })
 export class Auth {
   loginForm: FormGroup;
@@ -37,7 +39,8 @@ export class Auth {
     this.apiService.postV1('auth/login', { email, password }).then(async response => {
       this.router.navigate(['/dashboard']);
     }).catch(error => { 
-      throw new Error('Login failed: ' + error.message);
+      this.openDialog('300ms', '200ms');
+      throw new Error('Login failed: ' + error);
     });
   }
 
@@ -46,9 +49,19 @@ export class Auth {
     const email = this.registerForm.get('email')?.value;
     const password = this.registerForm.get('password')?.value;
     this.apiService.postV1('user/register', { username, email, password }).then(response => {
-      console.log('Register Response:', response);
     }).catch(error => {
-      console.error('Register Error:', error);
+      this.openDialog('300ms', '200ms');
+      throw new Error('Registration failed: ' + error);
+    });
+  }
+
+  readonly dialog = inject(MatDialog);
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(DialogErrorDialog, {
+      width: '250px',
+      enterAnimationDuration,
+      exitAnimationDuration,
     });
   }
 }
