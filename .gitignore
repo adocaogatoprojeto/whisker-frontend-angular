@@ -44,7 +44,6 @@ Thumbs.db
 
 # Environment files
 /src/environments/environment*.ts
-/src/shared/environments/environment*.ts
 /src/environments/*.json
 /src/shared/environments/*.json
 /src/environments/*.js
@@ -66,7 +65,6 @@ Thumbs.db
 /src/environments/environment.local.ts
 /src/environments/environment.dev.ts
 /src/shared/environments/environment.prod.ts
-/src/shared/environments/
 
 # Configuration files
 /.env
