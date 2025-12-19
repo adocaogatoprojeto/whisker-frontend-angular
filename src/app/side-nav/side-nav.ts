@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav'
-import { navigationObjects } from '../navigation/navigationObjects';
+import { navigationItems } from '../navigation/navigationItems';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
@@ -16,7 +16,7 @@ export class SideNav {
   @ViewChild('drawer') drawer!: MatSidenav;
   
   showFiller = false;
-  navigationObjects = navigationObjects;
+  navigationObjects = navigationItems;
   drawerOpened = true;
 
   toggle(item: any) {

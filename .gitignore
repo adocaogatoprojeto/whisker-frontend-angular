@@ -64,7 +64,6 @@ Thumbs.db
 /src/environments/local.settings.json
 /src/shared/environments/local.settings.json
 /src/environments/environment.local.ts
-/src/shared/environments/environment.local.ts
 /src/environments/environment.dev.ts
 /src/shared/environments/environment.prod.ts
 /src/shared/environments/
