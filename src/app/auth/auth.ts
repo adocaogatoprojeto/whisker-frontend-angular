@@ -37,7 +37,7 @@ export class Auth {
     const password = this.loginForm.get('password')?.value;
 
     this.apiService.postV1('auth/login', { email, password }).then(async response => {
-      this.router.navigate(['/dashboard']);
+      await this.router.navigate(['/dashboard']);
     }).catch(error => { 
       this.openDialog('300ms', '200ms');
       throw new Error('Login failed: ' + error);
