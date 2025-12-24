@@ -4,6 +4,8 @@ import { ApiService } from '../../api/api.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogErrorDialog } from '../../shared/dialog-error/dialog-error';
+import { isPlatformBrowser } from '@angular/common';
+import { PLATFORM_ID, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-auth',
@@ -19,7 +21,12 @@ export class Auth {
   username = new FormControl('', Validators.required);
   protected readonly title = signal('whisker-frontend-angular');
 
-  constructor(private apiService: ApiService, private fb: FormBuilder, private router: Router) {
+  constructor(
+    private apiService: ApiService, 
+    private fb: FormBuilder, 
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -36,8 +43,23 @@ export class Auth {
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
 
-    this.apiService.postV1('auth/login', { email, password }).then(async response => {
-      this.router.navigate(['/dashboard']);
+    this.apiService.postV1('auth/login', { email, password }, {}, true).then(async response => {
+      console.log('Login successful, navigating to dashboard');
+      console.log('Received token:', response.x_access_token);
+      
+      if (isPlatformBrowser(this.platformId)) {
+        try {
+          localStorage.setItem('x_access_token', response.x_access_token);
+          console.log('Token saved to localStorage');
+          // Verify it was saved
+          const savedToken = localStorage.getItem('x_access_token');
+          console.log('Token verified in localStorage:', savedToken);
+        } catch (error) {
+          console.error('Failed to save token to localStorage:', error);
+        }
+      }
+      
+      await this.router.navigate(['/dashboard']);
     }).catch(error => { 
       this.openDialog('300ms', '200ms');
       throw new Error('Login failed: ' + error);
@@ -48,7 +70,7 @@ export class Auth {
     const username = this.registerForm.get('username')?.value;
     const email = this.registerForm.get('email')?.value;
     const password = this.registerForm.get('password')?.value;
-    this.apiService.postV1('user/register', { username, email, password }).then(response => {
+    this.apiService.postV1('user/register', { username, email, password }, {}, true).then(response => {
     }).catch(error => {
       this.openDialog('300ms', '200ms');
       throw new Error('Registration failed: ' + error);
