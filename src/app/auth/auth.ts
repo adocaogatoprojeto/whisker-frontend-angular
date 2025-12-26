@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../api/api.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';

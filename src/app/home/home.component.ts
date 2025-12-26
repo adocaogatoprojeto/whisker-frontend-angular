@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Header } from '../header/header';
 import { MatDialog } from '@angular/material/dialog';
