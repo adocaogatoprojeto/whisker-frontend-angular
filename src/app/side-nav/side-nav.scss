@@ -1,0 +1,19 @@
+.side-nav-container {
+  height: 100dvh;
+}
+
+.side-nav {
+  width: 260px;
+}
+
+.side-nav-btns-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+}
+
+.main-content {
+  height: 100dvh;
+  padding: 16px;
+  box-sizing: border-box;
+}

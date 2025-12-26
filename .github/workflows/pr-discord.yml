@@ -13,88 +13,147 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send Discord Notification
+      - name: Send Discord Notification (Premium Layout)
         env:
-          DISCORD_URL_PR_WEBHOOK: ${{ secrets.DISCORD_URL_PR_WEBHOOK }}
+          WEBHOOK: ${{ secrets.DISCORD_URL_PR_WEBHOOK }}
         run: |
+          set -e
+
           EVENT="${{ github.event_name }}"
           ACTION="${{ github.event.action }}"
           REPO="${{ github.repository }}"
 
-          COLOR=5793266 # default azul
           TITLE=""
           DESCRIPTION=""
           URL=""
+          COLOR=5793266
           AUTHOR=""
           AUTHOR_ICON=""
+          FIELDS="[]"
 
+          # ===== Pull Request Events =====
           if [ "$EVENT" = "pull_request" ]; then
             TITLE_PR="${{ github.event.pull_request.title }}"
             URL="${{ github.event.pull_request.html_url }}"
             AUTHOR="${{ github.event.pull_request.user.login }}"
             AUTHOR_ICON="${{ github.event.pull_request.user.avatar_url }}"
+            BASE="${{ github.event.pull_request.base.ref }}"
+            HEAD="${{ github.event.pull_request.head.ref }}"
+            PR_NUMBER="${{ github.event.pull_request.number }}"
 
             if [ "$ACTION" = "opened" ]; then
-              TITLE="🆕 Novo Pull Request"
-              DESCRIPTION="**$TITLE_PR**"
+              TITLE="🆕 Pull Request Aberto"
               COLOR=3066993
             fi
 
             if [ "$ACTION" = "closed" ]; then
               if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
                 TITLE="🎉 Pull Request Mergeado"
-                DESCRIPTION="**$TITLE_PR**"
                 COLOR=15844367
               else
                 TITLE="❌ Pull Request Fechado"
-                DESCRIPTION="**$TITLE_PR**"
                 COLOR=15158332
               fi
             fi
+
+            DESCRIPTION="**$TITLE_PR**"
+
+            FIELDS=$(jq -n \
+              --arg pr "#$PR_NUMBER" \
+              --arg branch "$HEAD → $BASE" \
+              --arg repo "$REPO" \
+              '[
+                { "name": "🔢 PR", "value": $pr, "inline": true },
+                { "name": "🌿 Branch", "value": $branch, "inline": true },
+                { "name": "📦 Repositório", "value": $repo, "inline": true }
+              ]')
           fi
 
+          # ===== Comment on Pull Request =====
           if [ "$EVENT" = "issue_comment" ]; then
-            if [ "${{ github.event.issue.pull_request }}" != "" ]; then
-              TITLE="💬 Novo Comentário em PR"
-              DESCRIPTION="${{ github.event.comment.body }}"
-              URL="${{ github.event.comment.html_url }}"
-              AUTHOR="${{ github.event.comment.user.login }}"
-              AUTHOR_ICON="${{ github.event.comment.user.avatar_url }}"
-              COLOR=3447003
-            else
+            if [ "${{ github.event.issue.pull_request }}" = "" ]; then
+              echo "Comentário não é em PR. Ignorando."
               exit 0
             fi
+
+            TITLE="💬 Novo Comentário em Pull Request"
+            DESCRIPTION="${{ github.event.comment.body }}"
+            URL="${{ github.event.comment.html_url }}"
+            AUTHOR="${{ github.event.comment.user.login }}"
+            AUTHOR_ICON="${{ github.event.comment.user.avatar_url }}"
+            COLOR=3447003
+
+            FIELDS=$(jq -n \
+              --arg repo "$REPO" \
+              '[
+                { "name": "📦 Repositório", "value": $repo, "inline": true }
+              ]')
           fi
 
+          # ===== Pull Request Review =====
           if [ "$EVENT" = "pull_request_review" ]; then
-            STATE="${{ github.event.review.state }}"
             TITLE_PR="${{ github.event.pull_request.title }}"
             URL="${{ github.event.pull_request.html_url }}"
             AUTHOR="${{ github.event.review.user.login }}"
             AUTHOR_ICON="${{ github.event.review.user.avatar_url }}"
+            STATE="${{ github.event.review.state }}"
 
-            TITLE="🧐 Review em Pull Request"
-            DESCRIPTION="**$TITLE_PR**\n📋 Status: **$STATE**"
-            COLOR=10181046
+            case "$STATE" in
+              approved)
+                STATE_LABEL="✅ Approved"
+                COLOR=3066993
+                ;;
+              changes_requested)
+                STATE_LABEL="🔄 Changes Requested"
+                COLOR=15158332
+                ;;
+              commented)
+                STATE_LABEL="💬 Commented"
+                COLOR=10181046
+                ;;
+              *)
+                STATE_LABEL="$STATE"
+                COLOR=5793266
+                ;;
+            esac
+
+            TITLE="🧐 Code Review"
+            DESCRIPTION="**$TITLE_PR**"
+
+            FIELDS=$(jq -n \
+              --arg state "$STATE_LABEL" \
+              --arg repo "$REPO" \
+              '[
+                { "name": "📋 Status do Review", "value": $state, "inline": true },
+                { "name": "📦 Repositório", "value": $repo, "inline": true }
+              ]')
           fi
 
-          curl -X POST -H "Content-Type: application/json" \
-          -d "{
-            \"username\": \"Barão pisado\",
-            \"avatar_url\": \"https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png\",
-            \"embeds\": [{
-              \"title\": \"$TITLE\",
-              \"url\": \"$URL\",
-              \"description\": \"$DESCRIPTION\",
-              \"color\": $COLOR,
-              \"author\": {
-                \"name\": \"$AUTHOR\",
-                \"icon_url\": \"$AUTHOR_ICON\"
-              },
-              \"footer\": {
-                \"text\": \"$REPO\"
-              }
-            }]
-          }" \
-          $DISCORD_URL_PR_WEBHOOK
-
+          # ===== Send Discord Embed =====
+          jq -n \
+            --arg title "$TITLE" \
+            --arg desc "$DESCRIPTION" \
+            --arg url "$URL" \
+            --arg author "$AUTHOR" \
+            --arg icon "$AUTHOR_ICON" \
+            --argjson color $COLOR \
+            --argjson fields "$FIELDS" \
+            '{
+              username: "Barão pisado",
+              avatar_url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+              embeds: [{
+                title: $title,
+                url: $url,
+                description: $desc,
+                color: $color,
+                author: {
+                  name: $author,
+                  icon_url: $icon
+                },
+                fields: $fields,
+                footer: {
+                  text: "GitHub • Pull Request Automation"
+                },
+                timestamp: (now | todate)
+              }]
+            }' | curl -s -X POST -H "Content-Type: application/json" -d @- "$WEBHOOK"
