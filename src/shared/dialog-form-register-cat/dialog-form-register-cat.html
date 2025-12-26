@@ -1,0 +1,88 @@
+<form [formGroup]="registerCatForm" class="formRegisterCat" (ngSubmit)="registerCat()">
+    <h2>Register Your Cat</h2>
+    <mat-form-field appearance="fill">
+        <input matInput formControlName="name" placeholder="Enter your cat's name*" required>
+        @if(registerCatForm.get('name')?.hasError('required')) {
+        <mat-error>Name is required</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <input matInput formControlName="photoUrl" placeholder="Enter your cat's photo*" required>
+        @if(registerCatForm.get('photoUrl')?.hasError('required')) {
+        <mat-error>Photo URL is required</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <input matInput formControlName="gender" placeholder="Enter your cat's gender*" required>
+        @if(registerCatForm.get('gender')?.hasError('required')) {
+        <mat-error>Gender is required</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Choose a birth date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="birthDate" placeholder="MM/DD/YYYY" required>
+        @if(registerCatForm.get('birthDate')?.hasError('required')) {
+            <mat-error>Birth date is required</mat-error>
+        }
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="fill">
+        <input matInput formControlName="description" placeholder="Enter your cat's description*" required>
+        @if(registerCatForm.get('description')?.hasError('required')) {
+        <mat-error>Description is required</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <input matInput formControlName="age" type="number" placeholder="Enter your cat's age*" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <input matInput formControlName="breed" placeholder="Enter your cat's breed*" required>
+        @if (registerCatForm.get('breed')?.hasError('required')) {
+        <mat-error>Breed is required</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <input matInput formControlName="color" placeholder="Enter your cat's color*" required>
+        @if(registerCatForm.get('color')?.hasError('required')) {
+        <mat-error>Color is required</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <input matInput type="number" formControlName="weight" placeholder="Enter your cat's weight (kg)" required>
+        @if(registerCatForm.get('weight')?.hasError('float')) {
+        <mat-error>Weight have float</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <input matInput formControlName="isVaccinated" placeholder="Is your cat vaccinated?*" required>
+        @if(registerCatForm.get('isVaccinated')?.hasError('required')) {
+        <mat-error>Vaccination status is required</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <input matInput formControlName="isNeutered" placeholder="Is your cat neutered?*" required>
+        @if(registerCatForm.get('isNeutered')?.hasError('required')) {
+        <mat-error>Neutering status is required</mat-error>
+        }
+    </mat-form-field>
+
+    @if(registerCatForm.invalid) {
+    <button type="submit" mat-button="outlined" disabled>Register Cat</button>
+    } @else {
+    <button type="submit" mat-button="outlined" (click)="onSubmit()">Register Cat</button>
+    }
+
+</form>
