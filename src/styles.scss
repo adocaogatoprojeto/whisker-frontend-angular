@@ -33,6 +33,37 @@ body {
 
 /* You can add global styles to this file, and also import other style files */
 
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+    width: 3px;
+    background-color: var(--background-main);
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--secondary-font-color);
+    border-radius: 8px;
+}
+
+*::-moz-scrollbar {
+    width: 3px;
+    background-color: var(--background-main);
+}
+
+*::-moz-scrollbar-thumb {
+    background: var(--secondary-font-color);
+    border-radius: 8px;
+
+}
+html {
+    scroll-behavior: smooth;
+}
+
 html,
 body {
   height: 100%;
@@ -51,4 +82,10 @@ body {
 }
 .mdc-text-field--filled, .mdc-text-field, .mat-mdc-text-field-wrapper {
   border-radius: 8px !important;
+}
+
+.mat-icon-hoverable:hover {
+  color: #a900a9;
+  transition: color 0.3s ease-in-out;
+  cursor: pointer;
 }

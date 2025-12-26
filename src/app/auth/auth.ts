@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../api/api.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -44,22 +44,16 @@ export class Auth {
     const password = this.loginForm.get('password')?.value;
 
     this.apiService.postV1('auth/login', { email, password }, {}, true).then(async response => {
-      console.log('Login successful, navigating to dashboard');
-      console.log('Received token:', response.x_access_token);
-      
       if (isPlatformBrowser(this.platformId)) {
         try {
           localStorage.setItem('x_access_token', response.x_access_token);
-          console.log('Token saved to localStorage');
-          // Verify it was saved
           const savedToken = localStorage.getItem('x_access_token');
-          console.log('Token verified in localStorage:', savedToken);
         } catch (error) {
           console.error('Failed to save token to localStorage:', error);
         }
       }
       
-      await this.router.navigate(['/dashboard']);
+      await this.router.navigate(['/home']);
     }).catch(error => { 
       this.openDialog('300ms', '200ms');
       throw new Error('Login failed: ' + error);

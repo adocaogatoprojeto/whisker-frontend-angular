@@ -1,0 +1,11 @@
+.formRegisterCat {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px;
+
+    mat-form-field {
+        width: 100%;
+        padding: 4px
+    }
+}

@@ -1,6 +1,4 @@
 <app-header></app-header>
 <main class="main-container">
-  <button type="submit" matButton="outlined"><a routerLink="/register-cat">
-      Register Your Cat
-    </a></button>
+  <button mat-button="outlined" (click)="openDialog('250ms', '250ms')">Register Your Cat</button>
 </main>
