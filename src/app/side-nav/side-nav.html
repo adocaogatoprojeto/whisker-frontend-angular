@@ -1,18 +1,37 @@
-<mat-drawer-container class="example-container" autosize>
-    <mat-drawer #drawer class="example-sidenav" mode="side">
-        <p>Auto-resizing sidenav</p>
-        @if (showFiller) {
-        <p>Lorem, ipsum dolor sit amet consectetur.</p>
-        }
-        <button (click)="showFiller = !showFiller" matButton="elevated">
-            Toggle extra text
-        </button>
+<mat-drawer-container class="side-nav-container">
+
+    <mat-drawer #drawer class="side-nav" mode="side">
+        <div class="side-nav-btns-wrapper">
+            @for (item of navigationObjects; track item.name) {
+            <button mat-button class="nav-btn" (click)="item.children ? toggle(item) : drawer.close()"
+                [routerLink]="!item.children ? item.route : null">
+                <mat-icon>{{ item.icon }}</mat-icon>
+                {{ item.name }}
+                @if (item.children) {
+                <mat-icon class="arrow">
+                    {{ item.opened ? 'expand_less' : 'expand_more' }}
+                </mat-icon>
+                }
+            </button>
+
+            @if (item.children && item.opened) {
+            <div class="nested-menu">
+                @for (child of item.children; track child.route) {
+                <button mat-button class="nested-btn" [routerLink]="child.route">
+                    <mat-icon>{{ child.icon }}</mat-icon>
+                    {{ child.name }}
+                </button>
+                }
+            </div>
+            }
+            }
+        </div>
     </mat-drawer>
 
-    <div class="example-sidenav-content">
-        <button type="button" matButton (click)="drawer.toggle()">
-            Toggle sidenav
+    <mat-drawer-content>
+        <button mat-mini-fab type="button" (click)="toggleDrawer()">
+            <mat-icon>menu</mat-icon>
         </button>
-    </div>
+    </mat-drawer-content>
 
 </mat-drawer-container>

@@ -41,3 +41,34 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment files
+/src/environments/environment*.ts
+/src/environments/*.json
+/src/shared/environments/*.json
+/src/environments/*.js
+/src/shared/environments/*.js
+/src/environments/*.js.map
+/src/shared/environments/*.js.map
+/src/environments/*.d.ts
+/src/shared/environments/*.d.ts
+/src/environments/*.config.ts
+/src/shared/environments/*.config.ts
+/src/environments/*.config.js
+/src/shared/environments/*.config.js
+/src/environments/*.config.js.map
+/src/shared/environments/*.config.js.map
+/src/environments/*.config.d.ts
+/src/shared/environments/*.config.d.ts
+/src/environments/local.settings.json
+/src/shared/environments/local.settings.json
+/src/environments/environment.local.ts
+/src/environments/environment.dev.ts
+/src/shared/environments/environment.prod.ts
+
+# Configuration files
+/.env
+/.env.local
+/.env.*.local
+/src/certificates/*.p12
+/src/certificates/*.pem 
