@@ -1,0 +1,20 @@
+<swiper-container
+  slides-per-view="1"
+  space-between="30"
+  autoplay="true"
+  autoplay-delay="5000"
+  autoplay-disable-on-interaction="false"
+  pagination="true"
+  pagination-clickable="true"
+  navigation="true"
+  loop="true"
+  breakpoints="{
+    &quot;1024&quot;: { &quot;slidesPerView&quot;: 3, &quot;spaceBetween&quot;: 30 },
+    &quot;768&quot;: { &quot;slidesPerView&quot;: 1, &quot;spaceBetween&quot;: 20 }
+  }"
+  class="carousel"
+>
+  <swiper-slide *ngFor="let slide of slides" class="slide">
+    <img [src]="slide.img" alt="" class="img-style">
+  </swiper-slide>
+</swiper-container>
