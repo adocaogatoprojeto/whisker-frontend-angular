@@ -1,0 +1,24 @@
+.carousel {
+  width: 100%;
+}
+
+.slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-style {
+  width: 100%;
+  height: 75vh;
+  object-fit: cover;
+}
+
+:global(.swiper-button-next),
+:global(.swiper-button-prev) {
+  color: #65b029 !important;
+}
+
+:global(.swiper-pagination-bullet-active) {
+  background-color: #65b029 !important;
+}
